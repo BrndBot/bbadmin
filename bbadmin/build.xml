@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="BBProject" default="dist" basedir=".">
+    <description>
+        Brndbot build file
+    </description>
+  <!-- set global properties for this build -->
+  <property name="src" location="src"/>
+  <property name="classes"  location="classes"/>
+  <property name="dist"  location="dist"/>
+
+  <path id="alljars">
+    <fileset dir="lib/">
+      <include name="*.jar"/>
+    </fileset>
+  </path>
+  
+  <target name="init">
+    <!-- Create the time stamp -->
+    <tstamp/>
+    <!-- Create the build directory structure used by compile -->
+    <mkdir dir="${dist}"/>
+    <mkdir dir="${classes}"/>
+  </target>
+
+  <target name="compile" depends="init"
+        description="compile the source " >
+    <!-- Compile the java code from ${src} into ${classes} -->
+    <javac srcdir="${src}" destdir="${classes}" debug="true" includeantruntime="false">
+      <classpath refid="alljars"/>
+    </javac>
+  </target>
+
+  <target name="dist" depends="compile"
+        description="generate the distribution" >
+    <jar destfile="${dist}/bbadmin.jar">
+    	<fileset dir="${classes}"/>
+    	<zipfileset includes="**/*.class" src="lib/mysql-connector-java-5.1.30-bin.jar"/>
+    	<manifest>
+            <attribute name="Main-Class" value="com.brndbot.admin.AdminMain"/>
+        </manifest>
+    </jar>
+  </target>
+
+  <target name="clean"
+        description="clean up" >
+    <!-- Delete the ${build} and ${dist} directory trees -->
+    <delete dir="${lib}"/>
+    <delete dir="${classes}"/>
+  </target>
+</project>
